@@ -76,22 +76,25 @@
 
 ---
 
+
+
 ###### 53. bind
-
-<details><summary><b>Anwser</b></summary>
-<p>
-
-
-
-###### 4. 防抖函数？
-
-
 
 
 
 ---
 
-###### 5. 节流函数？
+
+
+###### 4. debounce
+
+
+
+---
+
+
+
+###### 5. throttle
 
 
 

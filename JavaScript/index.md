@@ -102,21 +102,19 @@ const arr = [1,2,3]
 
 ###### 9. compose函数？
 
-<details><summary><b>Anwser</b></summary>
-<p>
+
 ```javascript
 // 形如 g(f(x))
 function compose(...fns) {
     return function (...args) {
         return fns.reduceRight((accumulate, currentValue) => currentValue(accumulate), ...args)
     }
-
 }
-
 const user = {
     name: 'Dawson',
     age: 20
 }
+
 
 // 实现，获取用户前两位的大写名称
 function getName(user) {
@@ -137,16 +135,11 @@ const res = haveName(user);
 
 console.log(res);  // DA  对于pipe函数，仅是执行顺序不同而已，该用reduce即可
 ```
-
-</p> 
-</details>
-
 ---
 
 ###### 10. curring函数？
 
-<details><summary><b>Anwser</b></summary>
-<p>
+
 ```javascript
 function Curring(fn, ...params) {
     const length = fn.length;
@@ -171,8 +164,6 @@ const res = myAdd(2)(3)(4);
 console.log(res);
 ```
 
-</p> 
-</details>
 
 ---
 

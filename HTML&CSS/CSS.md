@@ -2,3 +2,53 @@
 
 ## 1. BFC
 
+
+## 2. div水平垂直居中
+```html
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        html,body {
+            width: 100%;
+            height: 100%;
+        }
+        div {
+            width: 200px;
+            height: 200px;
+            border: 1px solid black;
+            background-color: #000;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="container"></div>
+</body>
+</html>
+
+```
+### 1. Flex
+```CSS
+body {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+```
+
+### 2. Grid
+```CSS
+body {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+```
+
+

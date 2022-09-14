@@ -1,22 +1,98 @@
-#### 对象相关
-
-###### 2. 实现new过程？
-
-
-
----
-
-###### 15. 判断对象环引用？
-
-
+<div align="center">
+  <img height="60" src="https://img.icons8.com/color/344/javascript.png">
+  <h1>JavaScript Coding</h1>
+</div>
 
 ---
 
+##### 对象相关
+
+###### 1. 实现new过程？
+
+```javascript
+function myNew(fn, ...args) {
+  let obj = Object.create(fn.prototype);
+  let res = fn.call(obj, ...args);
+  if (res && typeof res === 'object') {
+    return res;
+  }
+  return obj;
+}
+
+function Person(options) {
+  this.name = options.name;
+  this.age = options.age;
+  this.getName = function () {
+    return this.name;
+  }
+  // return {name: 'test', age: 18}
+}
+
+Person.prototype.isAdult = function () {
+  return this.age < 20;
+}
+
+// ES5
+const person1 = new Person({
+  name: 'dawson',
+  age: 20
+})
+
+// myNew
+const person2 = myNew(Person, {
+  name: 'dawson',
+  age: 20
+})
+
+console.log(person1);
+console.log(person2);
+```
+
+---
 
 
-###### 22. 深拷贝实现？
 
+###### 2. 深拷贝实现？
 
+```javascript
+// 只考虑了array,null,object和循环引用， 思考如何实现其它引用数据类型？如set,map,function。。。
+function deepClone(source, map = new WeakMap()) {
+  if (typeof source === 'object') {
+    if (map.has(source)) {
+      return map.get(source);
+    }
+    let cloneObj = Array.isArray(source) ? [] : {}
+    map.set(source, cloneObj);
+    if (source) {
+      for (const key in source) {
+        cloneObj[key] = deepClone(source[key])
+      }
+      return cloneObj;
+    } else {
+      return souce;
+    }
+  } else {
+    return source;
+  }
+}
+
+const obj = {
+  name: 'dawson',
+  age: 20,
+  married: false,
+  hobbies: ['basketball', 'footaball', { name: 'swiming', time: 5 }],
+  car: {
+    price: 40000,
+    brand: 'bwa'
+  },
+}
+
+const copyObj = deepClone(obj);
+// 验证
+obj.hobbies[2].name = 'singing';
+console.log(obj.hobbies[2].name);    // singing
+console.log(copyObj.hobbies[2].name); // swiming
+```
 
 ---
 

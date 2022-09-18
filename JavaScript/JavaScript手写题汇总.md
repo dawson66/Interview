@@ -3,8 +3,6 @@
   <h1>JavaScript Coding</h1>
 </div>
 
----
-
 ##### 对象相关
 
 ###### 1. 实现new过程？

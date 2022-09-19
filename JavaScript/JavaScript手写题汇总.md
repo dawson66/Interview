@@ -3,6 +3,172 @@
   <h1>JavaScript Coding</h1>
 </div>
 
+##### 数据类型
+
+
+
+##### 原型
+
+###### 继承
+
+**原型链继承**
+
+```javascript
+function Person() {
+  this.name = 'dawson'
+}
+
+Person.prototype.getName = function () {
+  return this.name;
+}
+
+function Student() {}
+
+// 原型链继承：子类构造函数指向父类实例
+Student.prototype = new Person();
+
+const student = new Student();
+
+console.log(student.getName());  // dawson
+
+// 引发的问题？
+// 2. 在创建Student实例时，不能向Person传参
+```
+
+问题1：子类指向的是一个固定的实例对象，即所有Student实例都共享这个Person实例，它们操作的是同一个引用对象。
+
+```javascript
+function Person() {
+  this.name = 'dawson';
+  this.hobbies = ['backetball', 'football'];
+}
+
+Person.prototype.getName = function () {
+  return this.name;
+}
+
+Person.prototype.addHobbies = function (...args){
+  this.hobbies.push(...args);
+}
+
+function Student() {}
+
+Student.prototype = new Person();
+
+const student1 = new Student();
+const student2 = new Student();
+student1.addHobbies('music');
+student2.addHobbies('dance');
+console.log(student1.hobbies);  // ['backetball', 'football', 'music', 'dance']
+```
+
+问题2：子类创建时，不能向父类传参，因为子类实例化时，父类已经实例化好了。
+
+```javascript
+// 细想一下，子类实例化时，通用性属性一般super调用父类的构造函数来为子类初始化，然而，子类构造函数原型指向一个固定的对象，怎么也做不到传值的操作！
+```
+
+**构造函数继承**
+
+```javascript
+function Person(options) {
+  this.age = options.age;
+  this.name = 'dawson';
+  this.hobbies = ['backetball', 'football'];
+}
+
+Person.prototype.getName = function () {
+  return this.name;
+}
+
+Person.prototype.addHobbies = function (...args){
+  this.hobbies.push(...args);
+}
+
+function Student(options) {
+  // 所谓的构造函数继承就是在子类的构造函数中调用父类的构造函数并指定this
+  Person.call(this, options)
+}
+
+
+const student1 = new Student({age: 20});
+const student2 = new Student({age: 88});
+console.log(student1.age);  // 20
+console.log(student2.age);  // 88
+student1.addHobbies('music');
+student2.addHobbies('dance');
+console.log(student1.hobbies); // Uncaught TypeError: student1.addHobbies is not a function
+
+// 解决了什么问题？
+// 1. 解决了原型链继承的传参问题
+
+// 引发了什么问题？
+// addHobbies报错说明原型上没有此方法，即子类未继承父类原型链上的属性和方法；那么你可能会说，可以将方法挂载到属性上而不是原型上，没错，这样是可以的
+// 但是会引发一个问题，就是子类每次实例化时都会重复创建相同的方法，如addHobbies，这样就丧失了原型链或者面向对象的意义，因此引出下面思考
+
+// 思考：未继承原型链上的属性，那么我们怎么才能继承父类原型链上的属性呢？
+```
+
+**组合继承**
+
+```javascript
+function Person(options) {
+  this.age = options?.age || 20;
+  this.name = 'dawson';
+  this.hobbies = ['backetball', 'football'];
+}
+
+Person.prototype.getName = function () {
+  return this.name;
+}
+
+Person.prototype.addHobbies = function (...args){
+  this.hobbies.push(...args);
+}
+
+function Student(options) {
+  Person.call(this, options);
+  this.gender = options.gender;
+}
+
+// 借用原型继承的优点，子类原型指向父类实例，虽不能传参，但是能够继承原型链上的属性
+Student.prototype = new Person();
+// 借用构造函数继承的优点 ？ TODO
+Student.prototype.constructor = Student;
+
+const student1 = new Student({age: 20, gender: 'male'});
+const student2 = new Student({age: 88, gender: 'female'});
+console.log(student1);
+console.log(student1.age);  // 20
+console.log(student2.age);  // 88
+student1.addHobbies('music');
+student2.addHobbies('dance');
+console.log(student1.hobbies); // ['backetball', 'football', 'music']
+```
+
+寄生式组合继承
+
+```javascript
+
+```
+
+class继承
+
+```javascript
+class Person {
+  	this.type = 'person'
+  
+}
+
+class Son extends Person {
+  
+}
+```
+
+
+
+
+
 ##### 对象相关
 
 ###### 1. 实现new过程？

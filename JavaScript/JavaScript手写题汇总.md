@@ -133,7 +133,8 @@ function Student(options) {
 
 // 借用原型继承的优点，子类原型指向父类实例，虽不能传参，但是能够继承原型链上的属性
 Student.prototype = new Person();
-// 借用构造函数继承的优点 ？ TODO
+// 需要修复构造函数指向，Student实例constructor属性需要指向其构造函数
+// student1.constructor == Student   Student.prototype.constructor == Student
 Student.prototype.constructor = Student;
 
 const student1 = new Student({age: 20, gender: 'male'});
@@ -146,23 +147,78 @@ student2.addHobbies('dance');
 console.log(student1.hobbies); // ['backetball', 'football', 'music']
 ```
 
-寄生式组合继承
+组合继承已经能够实现对象的继承问题，算是一种解决方案了，但是还不够完美。如果你将student实例打印并查看的话，你会发现，属性不仅在实例中有，		在原型对象上也有，因为我们的父类构造函数被调用了两次！那么如何减少一次构造函数的调用呢？
+
+**寄生式组合继承**
 
 ```javascript
+// 寄生式组合继承作为ES6之前的 继承的 较好实现
+function Person(options) {
+  this.age = options?.age || 20;
+  this.name = 'dawson';
+  this.hobbies = ['backetball', 'football'];
+}
 
+Person.prototype.getName = function () {
+  return this.name;
+}
+
+Person.prototype.addHobbies = function (...args){
+  this.hobbies.push(...args);
+}
+
+function Student(options) {
+  Person.call(this, options);
+  this.gender = options.gender;
+}
+
+function F(){
+
+}
+
+// 中间加一层，子类原型指向F实例，F实例原型之乡Person的原型，实现原型链的访问
+F.prototype = Person.prototype;
+Student.prototype = new F();
+
+
+const student1 = new Student({age: 850, gender: 'male'});
+const student2 = new Student({age: 88, gender: 'female'});
+console.log(student1);
+console.log(student1.age);  // 20
+console.log(student2.age);  // 88
+student1.addHobbies('music');
+student2.addHobbies('dance');
+console.log(student1.hobbies); // ['backetball', 'football', 'music']
 ```
 
 class继承
 
 ```javascript
 class Person {
-  	this.type = 'person'
-  
+  constructor(options){
+    this.age = options?.age || 20;
+    this.name = 'dawson';
+    this.hobbies = ['backetball', 'football'];
+  }
+
+  getName() {
+    return this.name;
+  }
+
+  addHobbies(...args){
+    this.hobbies.push(...args);
+  }
 }
 
-class Son extends Person {
-  
+class Student extends Person {
+  constructor(options){
+    super(options)
+    this.gender = options.gender
+  }
 }
+
+const student3 = new Student({age: 890, gender: 'male'})
+console.log(student3);
 ```
 
 
@@ -304,13 +360,61 @@ console.log(copyObj.hobbies[2].name); // swiming
 
 #### 函数相关
 
-###### 51. call
+###### 51. bin d
+
+先来看一个例子
+
+```javascript
+// 例一
+var name = 'global'
+
+let obj = {
+  name: 'dawson'
+}
+
+function getName() {
+  return this.name;
+}
+
+const copyGetName = getName.bind(obj)
+console.log(getName());      // global
+console.log(copyGetName());  // dawson
+
+// 例二
+function add(a, b, c) {
+  return a + b + c;
+}
+const copyAdd = add.bind(null, 1);
+console.log(copyAdd(2, 3));   // 6
+```
+
+结论：
+
+* 返回一个函数
+* 绑定this
+* 柯里化特性（偏函数）
+* 构造函数特性
+
+```javascript
+// 实现上述三点，第四点是最难的，也请思考！
+Function.prototype._bind = function (context) {
+  if (typeof this !== 'function') {
+    throw new Error('bind只能被函数调用')
+  }
+  const fn = this;
+  const args = Array.prototype.slice.call(arguments, 1);
+  return function () {
+    const bindArgs = Array.prototype.slice.call(arguments);
+    return fn.call(context, ...args, ...bindArgs);
+  }
+}
+```
 
 
 
 ---
 
-###### 52. apply
+###### 52. call
 
 
 
@@ -318,7 +422,7 @@ console.log(copyObj.hobbies[2].name); // swiming
 
 
 
-###### 53. bind
+###### 53. apply
 
 
 

@@ -421,7 +421,15 @@ Function.prototype._bind = function (context) {
 顺着第一反应所想，看看你能写成啥样
 
 ```javascript
-// 例一
+Function.prototype._call = function (thisArg, ...argsArray){
+  if(typeof this !== 'function') {
+    throw new Error('call必须为函数调用')
+  }
+  const self = this;
+  const fn = self.bind(thisArg);
+  return fn(...argsArray)
+}
+// 例
 let name = 'smith';
 var age = 20;
 
@@ -434,20 +442,11 @@ function getNameAndAge() {
   return `My name is ${this.name} and my age is ${this.age}`;
 }        
 
-Function.prototype._call = function (context, ...args){
-  if(typeof this !== 'function') {
-    throw new Error('call必须为函数调用')
-  }
-  const self = this;
-  const fn = self.bind(context);
-  return fn(...args)
-}
-
-console.log(getNameAndAge());           // My name is smith and my age is 20
-console.log(getNameAndAge._call(obj));  // My name is dawson and my age is 25
+console.log(getNameAndAge());           // My name is smith and my age is 20, from undefined
+console.log(getNameAndAge._call(obj, '清华'));  // My name is dawson and my age is 25, from 清华
 ```
 
-
+仔细想想特性以及要补充的吧！
 
 ---
 
@@ -455,7 +454,38 @@ console.log(getNameAndAge._call(obj));  // My name is dawson and my age is 25
 
 ###### 53. apply
 
+apply与call基本相同，同样试着写一下
 
+```javascript
+// 参数为数组或类数组对象
+Function.prototype._apply = function (thisArg, argsArray){
+  if(typeof this !== 'function') {
+    throw new Error('call必须为函数调用')
+  }
+  const self = this;
+  const fn = self.bind(thisArg);
+  const args = argsArray?Array.from(argsArray) : [];
+  return fn(...args)
+}
+
+// 例
+let name = 'smith';
+var age = 20;
+
+let obj = {
+  name: 'dawson',
+  age: 25
+}
+
+function getNameAndAge() {
+  return `My name is ${this.name} and my age is ${this.age}`;
+}       
+
+console.log(getNameAndAge());           // My name is smith and my age is 20, from undefined
+console.log(getNameAndAge._apply(obj, ['清华']));  // My name is dawson and my age is 25, from 清华
+```
+
+仔细想想特性以及要补充的吧！
 
 ---
 

@@ -32,7 +32,6 @@ const student = new Student();
 console.log(student.getName());  // dawson
 
 // 引发的问题？
-// 2. 在创建Student实例时，不能向Person传参
 ```
 
 问题1：子类指向的是一个固定的实例对象，即所有Student实例都共享这个Person实例，它们操作的是同一个引用对象。
@@ -178,7 +177,10 @@ function F(){
 
 // 中间加一层，子类原型指向F实例，F实例原型之乡Person的原型，实现原型链的访问
 F.prototype = Person.prototype;
+// 这里试想一下，Student.prototype = Person.prototype 行不行？ 为何中间非要加一层？
 Student.prototype = new F();
+// 别忘了，constructor的正确指向
+Student.prototype.constructor = Student;
 
 
 const student1 = new Student({age: 850, gender: 'male'});
@@ -360,7 +362,7 @@ console.log(copyObj.hobbies[2].name); // swiming
 
 #### 函数相关
 
-###### 51. bin d
+###### 51. bind
 
 先来看一个例子
 
@@ -415,6 +417,35 @@ Function.prototype._bind = function (context) {
 ---
 
 ###### 52. call
+
+顺着第一反应所想，看看你能写成啥样
+
+```javascript
+// 例一
+let name = 'smith';
+var age = 20;
+
+let obj = {
+  name: 'dawson',
+  age: 25
+}
+
+function getNameAndAge() {
+  return `My name is ${this.name} and my age is ${this.age}`;
+}        
+
+Function.prototype._call = function (context, ...args){
+  if(typeof this !== 'function') {
+    throw new Error('call必须为函数调用')
+  }
+  const self = this;
+  const fn = self.bind(context);
+  return fn(...args)
+}
+
+console.log(getNameAndAge());           // My name is smith and my age is 20
+console.log(getNameAndAge._call(obj));  // My name is dawson and my age is 25
+```
 
 
 

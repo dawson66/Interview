@@ -460,7 +460,7 @@ apply与call基本相同，同样试着写一下
 // 参数为数组或类数组对象
 Function.prototype._apply = function (thisArg, argsArray){
   if(typeof this !== 'function') {
-    throw new Error('call必须为函数调用')
+    throw new Error('apply必须为函数调用')
   }
   const self = this;
   const fn = self.bind(thisArg);

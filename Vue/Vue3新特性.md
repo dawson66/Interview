@@ -62,8 +62,8 @@
 |    mounted    |      mounted      |      onMounted      |
 | beforeUpdate  |   beforeUpdate    |   onBeforeUnmount   |
 |    updated    |      updated      |     onUnmounted     |
-| beforeDestroy |   beforeUnmount   |   onBeforeDestroy   |
-|   destroyed   |     unmounted     |     onDestroyed     |
+| beforeDestroy |   beforeUnmount   |   onBeforeUnmount   |
+|   destroyed   |     unmounted     |     onUnmounted     |
 |   activated   |     activated     |     onActivated     |
 |  deactivated  |    deactivated    |    onDeactivated    |
 |               | **errorCaptured** | **onErrorCaptured** |

@@ -60,8 +60,8 @@
 |    created    |      created      |      onCreated      |
 |  beforeMount  |    beforeMount    |    onBeforeMount    |
 |    mounted    |      mounted      |      onMounted      |
-| beforeUpdate  |   beforeUpdate    |   onBeforeUnmount   |
-|    updated    |      updated      |     onUnmounted     |
+| beforeUpdate  |   beforeUpdate    |   onBeforeUpdate    |
+|    updated    |      updated      |      onUpdated      |
 | beforeDestroy |   beforeUnmount   |   onBeforeUnmount   |
 |   destroyed   |     unmounted     |     onUnmounted     |
 |   activated   |     activated     |     onActivated     |

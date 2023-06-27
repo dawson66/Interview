@@ -1,45 +1,30 @@
-# CG学习笔记
+##### CG知识点汇总
 
-> 该笔记为B站视频教学随笔记录，可能会比较零散
-
-
-
-## 向量
+> 个人遇到的问题或关键知识点，可能会比较零散
 
 
 
-### 加法
+###### 1. 向量点乘的意义？
 
+**概念：**向量的点乘，也叫向量的内积、数量积，对两个向量执行点乘运算，就是对这两个向量对应位一一相乘之后求和的操作，点乘的结果是一个标量。
 
+**几何意义：**
 
-### 减法
+* 可以用来表征或计算两个向量之间的夹角。
 
+* b向量在a向量方向上的投影。
 
-
-### 乘法
-
-#### 点乘
-
-###### 概念
-
->  向量的点乘，也叫向量的内积、数量积，对两个向量执行点乘运算，就是对这两个向量对应位一一相乘之后求和的操作，点乘的结果是一个标量。
-
-###### 几何意义
-
-1. 可以用来表征或计算两个向量之间的夹角。
-2. b向量在a向量方向上的投影。
-
-
-
-由获取的夹角值可进一步判断这两个向量是否是同一方向，是否正交（也就是垂直）等方向关系，具体关系为：
+由向量点乘获取的夹角值可进一步判断这两个向量是否是同一方向，是否正交（也就是垂直）等方向关系，具体关系为：
 
 * a . b > 0  方向基本相同，夹角在0度到90度之间
 * a . b = 0  正交，相互垂直
 * a . b < 0  方向基本相反，夹角在90度到180度之间
 
+---
 
 
-##### 叉乘
+
+###### 2. 向量叉乘的意义？
 
 在三维几何中，向量a和向量b的叉乘结果是一个向量，更为熟知的叫法是法向量，该向量垂直于a和b向量构成的平面。
 
@@ -47,78 +32,62 @@
 
 在二维空间中，叉乘还有一个几何意义：a X b等于由向量a和向量b构成的平行四边形面积。
 
-### 除法
+---
 
 
 
-## 什么是VBO、VAO、EBO以及与glEnableVertexAttribArrayh和glVertexAttribPointer的关系？
+###### 3. 什么是VBO、VAO、EBO以及与glEnableVertexAttribArray和glVertexAttribPointer的关系？
 
-### VBO
+1. **VBO：**
 
-VBO：顶点缓冲对象，Vertex Buffer Object；管理GPU上一块内存（显存），其用于储存顶点信息、颜色信息、法线信息、纹理坐标信息以及索引信息等等。
+   顶点缓冲对象，Vertex Buffer Object；管理GPU上一块内存（显存），其用于储存顶点信息、颜色信息、法线信息、纹理坐标信息以及索引信息等等。
 
-VBO是CPU和GPU之间传递信息的桥梁，我们把数据存入VBO（这一步在CPU执行），然后VBO会自动把数据送入GPU。送入GPU这一步，不需要任何人为操作，用户只负责往VBO中存入数据就可以了。
+   VBO是CPU和GPU之间传递信息的桥梁，我们把数据存入VBO（这一步在CPU执行），然后VBO会自动把数据送入GPU。送入GPU这一步，不需要任何人为操作，用户只负责往VBO中存入数据就可以了。
 
-但是对于GPU来说，VBO中存的就是一堆数字而已，要怎么解释它们呢？这就要用到VAO了
+   但是对于GPU来说，VBO中存的就是一堆数字而已，要怎么解释它们呢？这就要用到VAO了
 
+2. **VAO：**
 
+   顶点数组对象，Vertex Array Object；一个VAO可以有多个VBO，它是一个容器，它将所有可以由glVertexAttribPointer和其它一些函数进行设置的状态包装到一起。
 
-### VAO
+   VBO是为了向GPU传递顶点数据，那么VAO就是为了向GPU解释顶点数据。如:
 
-VAO：顶点数组对象，Vertex Array Object；一个VAO可以有多个VBO，它是一个容器，它将所有可以由glVertexAttribPointer和其它一些函数进行设置的状态包装到一起。
+   ```c++
+   float buffer = {
+      	//顶点坐标(3个一组)              //顶点颜色（3个一组）              //纹理坐标(2个一组)
+       0.5f,  0.5f, 0.0f,                1.0f, 0.0f, 0.0f,               1.0f, 1.0f,
+       0.5f, -0.5f, 0.0f,                0.0f, 1.0f, 0.0f,               1.0f, 0.0f,
+      -0.5f, -0.5f, 0.0f,                0.0f, 0.0f, 1.0f,               0.0f, 0.0f,
+      -0.5f,  0.5f, 0.0f,                1.0f, 1.0f, 0.0f,               0.0f, 1.0f
+   };
+   //以上数据仅为本博文编造，不具有实操意义		
+   ```
 
-VBO是为了向GPU传递顶点数据，那么VAO就是为了向GPU解释顶点数据。如:
+   由上可见，顶点数据并非只是三个为一组的三维坐标！若向VBO中传入如上述buffer数据，并且VBO把它们传入了GPU；下一步由顶点着色器进行读取，然而顶点着色器并不知道该如何解释这些数字，到底是把它们3个一组，还是3个一组、后2个一组、或者是别的组合... 即GPU并不知道。
 
-```c++
-float buffer = {
-   	//顶点坐标(3个一组)              //顶点颜色（3个一组）              //纹理坐标(2个一组)
-    0.5f,  0.5f, 0.0f,                1.0f, 0.0f, 0.0f,               1.0f, 1.0f,
-    0.5f, -0.5f, 0.0f,                0.0f, 1.0f, 0.0f,               1.0f, 0.0f,
-   -0.5f, -0.5f, 0.0f,                0.0f, 0.0f, 1.0f,               0.0f, 0.0f,
-   -0.5f,  0.5f, 0.0f,                1.0f, 1.0f, 0.0f,               0.0f, 1.0f
-};
-//以上数据仅为本博文编造，不具有实操意义
-```
+   这就需要VAO的参与了，它负责告诉GPU，VBO中的信息到底该以几个为一组、起始数据、步长等等。
 
-由上可见，顶点数据并非只是三个为一组的三维坐标！若向VBO中传入如上述buffer数据，并且VBO把它们传入了GPU；下一步由顶点着色器进行读取，然而顶点着色器并不知道该如何解释这些数字，到底是把它们3个一组，还是3个一组、后2个一组、或者是别的组合... 即GPU并不知道。
+   ```c++
+   	//vertex coord
+   glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)0);
+   glEnableVertexAttribArray(0);
+   
+   // color attribute
+   glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)(3 * sizeof(float)));
+   glEnableVertexAttribArray(1);
+   
+   // texture coord attribute
+   glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)(6 * sizeof(float)));
+   glEnableVertexAttribArray(2);
+   ```
 
-这就需要VAO的参与了，它负责告诉GPU，VBO中的信息到底该以几个为一组、起始数据、步长等等。
+3. **EBO：**Element Buffer Object——元素缓冲对象或**IBO**——索引缓冲对象Index Buffer Object。EBO是一个缓冲区，就像顶点缓冲区对象一样，它存储OpenGL用来决定要绘制哪些顶点的索引，这种绘制方式，可以减少顶点叠加造成的不必要开销。
 
-```C++
-	//vertex coord
-glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)0);
-glEnableVertexAttribArray(0);
-
-// color attribute
-glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)(3 * sizeof(float)));
-glEnableVertexAttribArray(1);
-
-// texture coord attribute
-glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)(6 * sizeof(float)));
-glEnableVertexAttribArray(2);
-```
-
-
-
-
-
-### EBO
+---
 
 
 
-## Shading01
-
-- Blinn-Phong reflectance model
-- Shading models / frequencies
-
-## Shading02
-
-* Graphics Pipeline
-* Texture mapping
-
-
-
-### Texture Filtering （纹理插值方式、纹理过滤、纹理滤波 ）
+###### 4. 什么是Texture Filtering （纹理插值方式、纹理过滤、纹理滤波 ）？
 
 1. 为什么在纹理采样时需要Texture Filtering？
 
@@ -142,15 +111,39 @@ glEnableVertexAttribArray(2);
       5. 三线性滤波：三线性滤波以双线性滤波为基础，会对pixel大小与texel大小最接近的两层mipmap level分别进行双线性过滤，然后再对两层得到的结果进行加权平均。三线性过滤在一般情况下已经非常理想了。但是到目前为止，我们均假设texture投射到屏幕空间是各向同性的。但对各向异性来说效果就不理想了，于是产生了各向异性过滤。
    2. 各向异性滤波（Anisotropic Filtering）：[各向异性过滤](https://baike.baidu.com/item/各向异性过滤/662077?fromModule=lemma_inlink)是现有消费级显卡所提供的图像质量最佳的滤波方式。传统的各项同性滤波中只是正方形的mipmap层次间进行双线性或三线性插值，但是当一个目标表面和摄像机之间的角度较大时，纹理的填充面积并不是正方形，这样便引起了模糊和闪烁等瑕疵。于是，各向异性滤波需要对一个非方形纹理进行采样。在一些简单的实现中，显卡使用长方形的纹理取代方形纹理，达到了较好的近似效果。但是这种方式在处理边界时效果依然不理想，原因是在倾斜的表面上，近端边界比远端边界拥有更多的像素。于是一些高端显卡使用了梯形纹理，当然这也要求更大的运算量。
 
+---
 
 
-### Mipmaps（多级渐远纹理）
+
+###### 5. 什么是Mipmaps（多级渐远纹理）？
 
 物体较远时，所占的像素片段很少，此时从纹理中为这些片段获取正确的颜色值就很困难，因为它需要对一个跨过纹理很大部分的片段只拾取一个纹理颜色。在小物体上会产生不真实的感觉，并且若再采用高分辨率纹理会浪费内存。
 
 为了解决此类问题，引入了Mipmap，它简单的来说就是一系列的纹理图像，后一个纹理图像是前一个的二分之一。多级渐远纹理背后的理念很简单：距观察者的距离超过一定的阈值，openGL会使用不同的多级渐远纹理（图像），即最**适合**物体的距离的那个。
 
-## Shading03
+---
+
+
+
+###### Shading01
+
+- Blinn-Phong reflectance model
+- Shading models / frequencies
+
+---
+
+
+
+###### Shading02
+
+* Graphics Pipeline
+* Texture mapping
+
+---
+
+
+
+###### Shading03
 
 * Barycentric corrdinates
 * Texture antialiasing (MipMap)  纹理太小 --> 插值，纹理太大--> 范围查询
@@ -160,9 +153,7 @@ glEnableVertexAttribArray(2);
 
 
 
-
-
-## 10. Geometry
+###### Geometry相关
 
 计算机图形学中对几何进行归类
 
@@ -183,27 +174,34 @@ glEnableVertexAttribArray(2);
    * 。。。
 
 
-## 光照
+---
 
-### 冯氏光照模型(Phong Lighting Model)
 
-> ObjectLightColor = (ambient + diffuse + specular)
 
-* 环境光照(Ambient Lighting)：即使在黑暗的情况下，世界上通常也仍然有一些光亮（月亮、远处的光），所以物体几乎永远不会是完全黑暗的。为了模拟这个，会使用一个环境光照常量，它永远会给物体一些颜色。**说白了场景中默认是有环境光照的，一般用一个环境光照系数表示。**
+###### 6. 介绍一下什么是冯氏光照模型(Phong Lighting Model)？
 
-  * ```c++
-    void main()
-    {
-        float ambientStrength = 0.1;
-        vec3 ambient = ambientStrength * lightColor;
-    
-        vec3 result = ambient * objectColor;
-        FragColor = vec4(result, 1.0);
-    }
+```glsl
+// 冯氏光照模型
+ObjectLightColor = (ambient + diffuse + specular)
+```
 
-* 漫反射光照(Diffuse Lighting)：模拟光源对物体的方向性影响(Directional Impact)。它是冯氏光照模型中视觉上最显著的分量。物体的某一部分越是对着光源，它就会越亮。说白了**漫反射是跟角度有关系**。
+1. 环境光照(Ambient Lighting)：即使在黑暗的情况下，世界上通常也仍然有一些光亮（月亮、远处的光），所以物体几乎永远不会是完全黑暗的。为了模拟这个，会使用一个环境光照常量，它永远会给物体一些颜色。**说白了场景中默认是有环境光照的，一般用一个环境光照系数表示。**
 
-* 镜面光照(Specular Lighting)：模拟有光泽物体上面出现的亮点。镜面光照的颜色相比于物体的颜色会更倾向于光的颜色。**说白了，物体表面越光滑，其光照颜色更倾向于光。**
+   ```glsl
+      void main()
+      {
+          float ambientStrength = 0.1;
+          vec3 ambient = ambientStrength * lightColor;
+      
+          vec3 result = ambient * objectColor;
+          FragColor = vec4(result, 1.0);
+      }
+   ```
+
+
+2. 漫反射光照(Diffuse Lighting)：模拟光源对物体的方向性影响(Directional Impact)。它是冯氏光照模型中视觉上最显著的分量。物体的某一部分越是对着光源，它就会越亮。说白了**漫反射是跟角度有关系**。
+
+3. 镜面光照(Specular Lighting)：模拟有光泽物体上面出现的亮点。镜面光照的颜色相比于物体的颜色会更倾向于光的颜色。**说白了，物体表面越光滑，其光照颜色更倾向于光。**
 
 
 

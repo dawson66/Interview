@@ -225,7 +225,8 @@ opengl中的大部分工作是将3D坐标转换为2D像素，而这部分工作�
 
 ```glsl
 // 冯氏光照模型
-ObjectLightColor = (ambient + diffuse + specular)
+vec3 result = (ambient + diffuse + specular) * objectColor;
+FragColor = vec4(result, 1.0);
 ```
 
 1. 环境光照(Ambient Lighting)：即使在黑暗的情况下，世界上通常也仍然有一些光亮（月亮、远处的光），所以物体几乎永远不会是完全黑暗的。为了模拟这个，会使用一个环境光照常量，它永远会给物体一些颜色。**说白了场景中默认是有环境光照的，一般用一个环境光照系数表示。**
@@ -244,7 +245,11 @@ ObjectLightColor = (ambient + diffuse + specular)
 
 2. 漫反射光照(Diffuse Lighting)：模拟光源对物体的方向性影响(Directional Impact)。它是冯氏光照模型中视觉上最显著的分量。物体的某一部分越是对着光源，它就会越亮。说白了**漫反射是跟角度有关系**。
 
+   详细计算请参考[LearnOpenGL-基础光照](https://learnopengl-cn.github.io/02%20Lighting/02%20Basic%20Lighting/)
+
 3. 镜面光照(Specular Lighting)：模拟有光泽物体上面出现的亮点。镜面光照的颜色相比于物体的颜色会更倾向于光的颜色。**说白了，物体表面越光滑，其光照颜色更倾向于光。**
+
+   详细计算请参考[LearnOpenGL-基础光照](https://learnopengl-cn.github.io/02%20Lighting/02%20Basic%20Lighting/)
 
 
 

@@ -226,6 +226,20 @@
    }
    ```
 
+3. 扇形
+
+   ```css
+   #container {
+     width: 0;
+     height: 0;
+     border: 50px solid transparent;
+     border-top-color: red;
+     // 相较于三角形，元素多加了圆角
+     border-top-left-radius: 50px;
+     border-top-right-radius: 50px;
+   }
+   ```
+
 ---
 
 ##### 4. css高度坍塌
@@ -299,4 +313,60 @@
    }
    ```
 
-   
+##### 5. CSS选择器及其优先级？
+
+|     选择器     |                         格式                         | 优先级权重 |
+| :------------: | :--------------------------------------------------: | :--------: |
+|    ID选择器    |                         #id                          |    100     |
+|    类选择器    |                      .classname                      |     10     |
+|   属性选择器   |                      标签[属性]                      |     10     |
+|   伪类选择器   |                selector:pseudo-class                 |     10     |
+|   标签选择器   |                       标签 {}                        |     1      |
+|  伪元素选择器  |               selector::pseudo-element               |     1      |
+| 相邻兄弟选择器 | former_element + target_element { style properties } |     0      |
+|    子选择器    |             元素 1 > 元素 2 { 样式声明 }             |     0      |
+|   后代选择器   |                selector1 selector2 {}                |     0      |
+|  通配符选择器  |                          *                           |     0      |
+
+**优先级总结：**
+
+* `!important`声明的样式优先级最高
+* 内联样式：1000
+* id选择器：100
+* 类选择器、伪类选择器、属性选择器：10
+* 标签选择器、伪元素选择器：1
+
+---
+
+##### 6. 常见的伪类选择器有哪些？
+
+> CSS伪类时添加到选择器的关键字，用于指定所选元素的特殊**状态**。
+
+**常见的有：**
+
+* :active
+* :checked
+* :disabled
+* :empty
+* :first
+* :first-child
+* :fullscreen
+* :focus
+* :hover
+* :last-child
+* :not()
+* :nth-child()
+* :nth-last-child()
+
+---
+
+##### 7. CSS3有哪些新特性？
+
+* 新增各种CSS选择器；如伪类`not()`、`nth-child()`等等
+* 圆角`border-radius`
+* 多列布局（[Column layouts](https://developer.mozilla.org/zh-CN/docs/Web/CSS/Layout_cookbook/Column_layouts)）
+*  阴影和反射：`box-shadow`和`-webkit-box-reflect`
+* 文字特效：`text-shadow`
+* 文字渲染：`text-decoration`
+* 线性渐变：`gradient`
+* 变换：`transform`

@@ -18,20 +18,21 @@
 
 ###### 6. three.js加载需要哪几个核心？有哪几种camera？
 
-1. scene：
-2. camera
-   1. camera：摄像机的基础类，不能够被直接实例化
-   2. perspectiveCamera 使用透视投影
-   3. orthographicCamera 使用正交投影
-   4. cubeCamera：创建6个渲染到webGLCubeRenderTarget的摄像机
-   5. stereoCamera：立体摄像机
-3. renderer
+* scene：
+
+* camera
+  * camera：摄像机的基础类，不能够被直接实例化
+  * perspectiveCamera 使用透视投影
+  * orthographicCamera 使用正交投影
+  * cubeCamera：创建6个渲染到webGLCubeRenderTarget的摄像机
+  * stereoCamera：立体摄像机
+* renderer
 
 ---
 
-###### 7. proj4 经纬度反了、
+###### 7. proj4 经纬度反了是什么原因？
 
-Order Axis：默认情况下，proj4对投影（笛卡尔）坐标系使用`[x, y]`轴顺序，对地理坐标系使用`[x=longitude, y=latitude]`。对x和y相反排序可以设置`forward`或`inverse`	方法的第二个参数`enforceAxis`来设置；enforceAxis是`Boolean`类型，当设置为true时，x和y将对调位置。		
+Order Axis：默认情况下，proj4对投影（笛卡尔）坐标系使用`[x, y]`轴顺序，对地理坐标系使用`[x=longitude, y=latitude]`。对x和y相反排序可以设置`forward`或`inverse`方法的第二个参数`enforceAxis`来设置；enforceAxis是`Boolean`类型，当设置为true时，x和y将对调位置。		
 
 ```typescript
 proj4(fromProjection, toProjection).forward(coordinate, enforceAxis)
@@ -54,7 +55,9 @@ path有三种：
 
 ###### 9. openlayers添加poi点
 
-添加point feature ，设置其style为一些图标 图像等
+添加point feature ，设置其style为一些图标 图像等。
+
+---
 
 ###### 10. 3dtiles如何做单体化，是数据做单体化，还是前端做单体化，字段是什么？
 
@@ -78,30 +81,50 @@ path有三种：
 
    d：添加一个移动的面及样式，绑定移动事件；移动时获取当前选中的面的坐标，设定移动面的坐标为当前选中的面。
 
-   
+   ---
 
 ###### 11. 模型数据比较大，如何优化，cesium/three？
 
 ###### 12. 3d模型数据格式有哪些？
 
+* OSGB
+* Obj
+* Fbx
+* Las/Laz
+* 3ds
+
 ###### 13. 点云数据格式有哪些？
 
-###### 14. openlayers如何加载点云数据的
+* pts
+* Las
+* Laz
+* pcd
+* .xyz
+
+---
+
+###### 14. Las和Laz点云文件的区别？
+
+* Las与Laz相比，其占用磁盘内存减少，大概四倍左右。
+* Laz较Las读取时间降低。
+
+###### 15. openlayers如何加载点云数据的
 
 旧版本的openlayers 有`WebGLPointLayer`图层，新版本取消了该图层；可使用`renderer/webgl/PointsLayer`优化
 
-###### 15. openlayers如何加载矢量数据的
+###### 16. openlayers如何加载矢量数据的
 
-###### 16. 你知道哪些常见的抗锯齿方法以及其原理？cesium中有哪些抗锯齿方法？
+###### 17. 你知道哪些常见的抗锯齿方法以及其原理？cesium中有哪些抗锯齿方法？
 
-1. [抗锯齿分类](https://zhuanlan.zhihu.com/p/159171397)
-2. MSAA
-3. SSAA
-4. FXAA
-5. MLAA
-6. 。。。
+参考：[抗锯齿分类](https://zhuanlan.zhihu.com/p/159171397)
 
-###### 17. cesium中有哪些后处理？并说明其含义？
+1. MSAA
+2. SSAA
+3. FXAA
+4. MLAA
+5. 。。。
+
+###### 18. cesium中有哪些后处理？并说明其含义？
 
 cesium中的后处理主要集中在`postProcessStageCollection`和`postProcessStageLibrary`两个类中，其中抗锯齿fxaa、环境光遮蔽ambientOcclusion和泛光bloom作为`postProcessStageCollection`类的成员属性存在，其余的后处理在`postProcessStageLibrary`类中以成员方法存在，以`postProcessStageLibrary.create后处理名称` API形式存在。
 
@@ -116,12 +139,13 @@ cesium中的后处理主要集中在`postProcessStageCollection`和`postProcessS
 9. 轮廓效果：silhouette
 10. 夜视效果：night vision
 
-###### 18. three.js中drawCall的理解？作用？
+###### 19. three.js中drawCall的理解？作用？
 
-###### 19. openlayers 吸附snap原理？
+###### 20. openlayers 吸附snap原理？
 
-###### 20. openlayers 实现undo redo原理？
+###### 21. openlayers 实现undo redo原理？
 
-###### 21. 说一说mapbox style expression （样式表达式）？规则是什么？有什么作用？
+###### 22. 说一说mapbox style expression （样式表达式）？规则是什么？有什么作用？
 
-###### 22. 什么是PBR？
+###### 23. 什么是PBR？
+

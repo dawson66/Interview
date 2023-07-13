@@ -1,10 +1,10 @@
-###### 1. type和interface的区别
+##### 1. type和interface的区别
 
-###### 2. enum常规枚举和常量枚举的区别
+##### 2. enum常规枚举和常量枚举的区别
 
-###### 3. void定义的变量类型
+##### 3. void定义的变量类型
 
-###### 4. 如何表示interface的子集？并介绍一下Typescript中的`Utility Types`
+##### 4. 如何表示interface的子集？
 
 ```typescript
 interface UserInfo {
@@ -19,7 +19,9 @@ function getUserInfo(user: Partial<UserInfo>) {
 }
 ```
 
+---
 
+##### 5. 介绍一下Typescript中的`Utility Types`
 
 
 

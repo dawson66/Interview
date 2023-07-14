@@ -87,20 +87,26 @@
 
 ##### 12. JavaScript的存储方式有哪些？有什么区别？分别的应用场景？
 
-###### 一、存储方式
+###### 存储方式
 
 * Cookie
 * localStorage
 * sesstionStorage
 * indexDB
 
-###### 二、区别
+###### 区别
 
 这里主要说一下`cookie`、`localStorage`、`sessionStorage`三者的区别：
 
 * **存储大小：**`cookie`的数据大小不能超过**4k**，`localStorage`和`sessionStorage`虽然也有存储大小限制，但是比`cookie`大的多，可以达到**5M**或者更大。
 * **有效时间：**
 * **数据与服务器之间的交互方式：**
+
+###### 应用场景：
+
+
+
+---
 
 
 

@@ -10,8 +10,6 @@
 
 ##### 5. 说一说对TypeScript中接口的理解？与`Type`有什么区别？如何表示interface的子集？
 
-
-
 ###### interface的子集表示：
 
 ```typescript
@@ -35,17 +33,15 @@ function getUserInfo(user: Partial<UserInfo>) {
 
 > 泛型（Generics）是指在定义函数、接口或类的时候，不预先指定具体的类型，而在使用的时候再指定类型的一种特性。
 
-##### 4. 说一说对TypeScript中命名空间及模块的理解？
+##### 8. 说一说对TypeScript中命名空间及模块的理解？
 
-##### 4. type和interface的区别？解释一下类型别名和接口
+##### 9. type和interface的区别？解释一下类型别名和接口
 
-##### 5. 说一说你对TypeScript枚举类型的理解以及应用场景？enum常规枚举和常量枚举的区别？
+##### 10. 说一说你对TypeScript枚举类型的理解以及应用场景？enum常规枚举和常量枚举的区别？
 
-##### 6. void定义的变量类型
+##### 11. void定义的变量类型
 
-##### 7. 如何表示interface的子集？
-
-##### 8. 介绍一下Typescript中的`Utility Types`？
+##### 12. 介绍一下Typescript中的`Utility Types`？
 
 ##### 
 

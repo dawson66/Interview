@@ -304,10 +304,117 @@ Vue内部设计原因导致，vue设计每个组件对应一个watcher（渲染w
 
 ---
 ## 六、内置组件
-1. slot是什么？有什么作用？原理是什么？
-2. 如何保存当前页面的状态？
-3. 对keep-alive的理解，它是如何实现的？具体缓存的是什么？
-3. 有没有封装过组件？原则、方法是什么？
+##### 1. slot是什么？有什么作用？原理是什么？
+
+##### 2. 对keep-alive的理解，它是如何实现的？具体缓存的是什么？
+
+##### 3. 如何保存当前页面的状态？比如有一个list，我切换到第几页再回来，如何保持在第几页？或者页面进入详情后，退回来，如何保持之前的信息？
+
+> 试想一下，如果左侧为list，右侧为list对应item的详情页，这种情况下不会出现题目说的问题。这种问题主要是发生了页面切换，即页面从A跳到了B，返回A的时候仍然要保持A之前的状态，那么这里的A即为List组件。这种情况，肯定是发生了路由跳转。正常情况下，想要让一个组件保持状态，只需要再外面用内置组件keep-alive包裹即可。但是这里面肯定发生了路由跳转，因为需要将router-view结合keep-alive来做。
+>
+> 在vue2.0中，router-view外面包裹一层keep-alive即可；但是在vue3.0中，router-view不能直接嵌在keep-alive中，需要结合v-slot使用；
+>
+> 除此之外，还需要考虑缓存组件的灵活性，即动态缓存，只对需要缓存的组件应用Keep-alive；如何解决呢？
+
+###### 组件：
+
+```vue
+// List.vue
+<template>
+  <div class="container">
+    <el-button @click="increment">{{ count }}</el-button>
+
+    <div v-for="item in data.slice(currentPage * pageSize, (currentPage + 1) * pageSize)" :key="item.id">
+      <span>{{ item.id }} —— </span>
+      <router-link :to="{ name: 'info', params: { description: item.description } }">{{ item.name }}</router-link>
+    </div>
+    <el-pagination layout="prev, pager, next" :page-size="pageSize" :total="data.length"
+      @current-change="paginationChange" />
+  </div>
+</template>
+
+<script setup lang="ts">
+import { ref, reactive, onBeforeMount, onMounted, onBeforeUnmount, onUnmounted } from 'vue'
+
+const count = ref(0);
+
+function increment() {
+  count.value++;
+}
+  
+// 简单的分页
+const currentPage = ref(0);
+const pageSize = 3;
+
+function paginationChange(val: any) {
+  console.log(typeof val);
+  currentPage.value = val - 1;
+}
+
+// mock data
+const data = reactive([
+  {
+    id: 0,
+    name: 'foo',
+    description: '你好啊，foo'
+  },
+  {
+    id: 1,
+    name: 'bar',
+    description: '你好啊，bar'
+  },
+  {
+    id: 2,
+    name: 'dawson',
+    description: '你好啊，dawson'
+  },
+  {
+    id: 3,
+    name: 'jason',
+    description: '你好啊，jason'
+  },
+  {
+    id: 4,
+    name: 'ruiqiu',
+    description: '你好啊，ruiqiu'
+  },
+  {
+    id: 5,
+    name: 'luo',
+    description: '你好啊，luo'
+  },
+])
+
+</script>
+
+<script lang="ts">
+// 注意：这里采用keep-alive inclue 包含具名组件来条件应用keep-alive
+export default {
+  name: 'layout'
+}
+</script>
+```
+
+###### 路由
+
+```vue
+// 外层包裹 router-view 组件
+<template>
+  <router-view v-slot="{ Component }">
+    <keep-alive :include="['layout']">
+      <component :is="Component"></component>
+    </keep-alive>
+  </router-view>
+</template>
+```
+
+###### 总结
+
+**综上所述：keep-alive结合router-view实现特定组件状态缓存，结合Keep-alive inclue指定具体哪些组件被缓存。但是这种方式不太好，组件name 被固定在条件上，是否可以借助路由meta来指定需要缓存的组件？**
+
+---
+
+##### 4. 有没有封装过组件？原则、方法是什么？
 
 ---
 ## 七、VNode
